@@ -43,41 +43,46 @@ const HomeScreen = ({ navigation }: { navigation: Props }) => {
   const handleLoadMore = () => {
     setPage(page + 1);
   };
-  const renderItem = ({ item }: { item: ItemProps }) => (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("Details", {
-          itemId: item?.id || "",
-        });
-      }}
-    >
-      <View accessible={true} style={styles.list}>
-        <View
-          style={{
-            marginHorizontal: 8,
-            marginTop: 30,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Image
-            source={{ uri: item ? item?.image_url : "/" }}
+  const renderItem = ({ item }: { item: ItemProps }) => {
+    const id = item?.id || "";
+    const url = item ? item?.image_url : "/";
+    const { name, description } = item;
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Details", {
+            itemId: id,
+          });
+        }}
+      >
+        <View accessible={true} style={styles.list}>
+          <View
             style={{
-              width: 50,
-              height: 200,
-              marginBottom: 40,
+              marginHorizontal: 8,
+              marginTop: 30,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-          />
-        </View>
+          >
+            <Image
+              source={{ uri: url }}
+              style={{
+                width: 50,
+                height: 200,
+                marginBottom: 40,
+              }}
+            />
+          </View>
 
-        <Text style={styles.heading2}>
-          {item.id}. {item.name}
-        </Text>
-        <Text style={styles.des}>{item.description}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+          <Text style={styles.heading2}>
+            {id}. {name}
+          </Text>
+          <Text style={styles.des}>{description}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -87,6 +92,8 @@ const HomeScreen = ({ navigation }: { navigation: Props }) => {
         data={data}
         keyExtractor={(item) => item.id || ""}
         renderItem={renderItem}
+        // avoid message ou have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like PureComponent, shouldComponentUpdate, etc.
+        initialNumToRender={8}
       />
     </View>
   );

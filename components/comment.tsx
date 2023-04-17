@@ -6,17 +6,31 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  InputAccessoryView,
+  Keyboard,
 } from "react-native";
 
 const Comment = () => {
   const [text, setText] = useState<string>("");
-  const [cmtList, setCmtList] = useState<string[]>([]);
+  const [cmtList, setCmtList] = useState<string[]>([
+    "Such a strong beer",
+    "Highly recommend",
+    "Amazing beer",
+    "Give it a try!",
+    "Not my type",
+  ]);
   const [isShowed, setIsShowed] = useState(false);
+  const [isFocus, setIsFocus] = useState(false);
+  const keyboardVerticalOffset = 1000;
+
   const handleSubmit = () => {
-    setIsShowed(true);
-    let newCmt = text;
-    setCmtList((cmtList) => [...cmtList, newCmt]);
-    setText("");
+    if (text) {
+      setIsShowed(true);
+      let newCmt = text;
+      setCmtList((cmtList) => [newCmt, ...cmtList]);
+      setText("");
+      Keyboard.dismiss();
+    } else return;
   };
   const renderItem = ({ item }: { item: string }) => (
     <Text
@@ -27,67 +41,88 @@ const Comment = () => {
       {item}
     </Text>
   );
+
   return (
     <View
       style={{
-        marginTop: 30,
+        marginTop: 20,
       }}
     >
-      {isShowed && (
-        <View
+      <View>
+        <Text
           style={{
-            marginBottom: 20,
+            fontWeight: "bold",
           }}
         >
-          <Text
-            style={{
-              fontWeight: "bold",
-            }}
-          >
-            Comment({cmtList.length}):
-          </Text>
-          <FlatList
-            data={cmtList}
-            keyExtractor={(index) => index}
-            renderItem={renderItem}
-          />
-        </View>
-      )}
+          Comment({cmtList.length}):
+        </Text>
+      </View>
+
       <View
         style={{
+          height: 130,
+          display: isFocus ? "none" : "flex",
           marginTop: 20,
-          paddingLeft: 5,
-          borderWidth: 0.3,
-          height: 40,
-          borderRadius: 5,
         }}
       >
-        <TextInput
-          style={{ height: 40 }}
-          placeholder="Leave your comment here..."
-          value={text}
-          onChangeText={(newText) => setText(newText)}
-          defaultValue={text}
+        <FlatList
+          data={cmtList}
+          keyExtractor={(index) => index + Math.random()}
+          renderItem={renderItem}
         />
-        <View style={styles.saveButtonContainer}>
+      </View>
+
+      <InputAccessoryView
+        style={{ paddingRight: 50, flex: 1, alignItems: "center" }}
+      >
+        <View
+          style={{
+            marginTop: 30,
+            paddingLeft: 5,
+            borderWidth: 0.3,
+            height: 40,
+            borderRadius: 5,
+            paddingHorizontal: 15,
+            maxWidth: 400,
+          }}
+        >
+          <TextInput
+            style={{ height: 40, flex: 1 }}
+            placeholder="Leave your comment here..."
+            value={text}
+            onChangeText={(newText) => setText(newText)}
+            defaultValue={text}
+            onFocus={() => {
+              setIsFocus(true);
+              Keyboard.isVisible();
+            }}
+            onEndEditing={() => {
+              setIsFocus(false);
+              setIsShowed(true);
+              setText("");
+            }}
+          />
+        </View>
+        <View style={{ flex: 1, alignItems: "center" }}>
           <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
-            <Text style={styles.saveButtonText}>Send </Text>
+            <Text style={styles.saveButtonText}>Send</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </InputAccessoryView>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  saveButtonContainer: {},
   saveButton: {
     borderWidth: 1,
     borderColor: "#1E716D",
     backgroundColor: "#1E716D",
     marginTop: 10,
-    padding: 5,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
     maxWidth: 80,
     borderRadius: 10,
+    margin: 5,
   },
   saveButtonText: {
     color: "#fff",
