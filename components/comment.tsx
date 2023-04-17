@@ -88,6 +88,7 @@ const Comment = () => {
         >
           <TextInput
             style={{ height: 40, flex: 1 }}
+            accessibilityLabel="Input for adding comment"
             placeholder="Leave your comment here..."
             value={text}
             onChangeText={(newText) => setText(newText)}
@@ -104,7 +105,11 @@ const Comment = () => {
           />
         </View>
         <View style={{ flex: 1, alignItems: "center" }}>
-          <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
+          <TouchableOpacity
+            style={styles.saveButton}
+            onPress={handleSubmit}
+            accessibilityLabel="Submit Button"
+          >
             <Text style={styles.saveButtonText}>Send</Text>
           </TouchableOpacity>
         </View>
