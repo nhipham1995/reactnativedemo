@@ -4,8 +4,9 @@ import {
   Image,
   StyleSheet,
   Text,
-  TouchableOpacity,
   Button,
+  ScrollView,
+  Platform,
 } from "react-native";
 
 interface ItemProps {
@@ -36,8 +37,9 @@ function RandomScreen({ navigation }: { navigation: Props }) {
   }, [navigation]);
 
   return (
-    <View
-      style={{
+    <ScrollView
+      // use contentContainerStyle instead of style for ScrollView
+      contentContainerStyle={{
         marginHorizontal: 8,
         marginTop: 30,
         display: "flex",
@@ -47,9 +49,9 @@ function RandomScreen({ navigation }: { navigation: Props }) {
     >
       <Image
         source={{ uri: item ? item[0]?.image_url : "/" }}
-        style={{ width: 120, height: 500, marginBottom: 40 }}
+        style={{ width: 100, height: 400, marginBottom: 40 }}
       />
-      <Text>
+      <Text style={{ marginBottom: Platform.OS === "android" ? 12 : 2 }}>
         Name:
         {item && item[0]?.name}
       </Text>
@@ -63,7 +65,7 @@ function RandomScreen({ navigation }: { navigation: Props }) {
         title="See details"
         color="#FF4701"
       />
-    </View>
+    </ScrollView>
   );
 }
 

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   InputAccessoryView,
   Keyboard,
+  SafeAreaView,
 } from "react-native";
 
 const Comment = () => {
@@ -17,11 +18,10 @@ const Comment = () => {
     "Highly recommend",
     "Amazing beer",
     "Give it a try!",
-    "Not my type",
+    "So light",
   ]);
   const [isShowed, setIsShowed] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
-  const keyboardVerticalOffset = 1000;
 
   const handleSubmit = () => {
     if (text) {
@@ -43,7 +43,7 @@ const Comment = () => {
   );
 
   return (
-    <View
+    <SafeAreaView
       style={{
         marginTop: 20,
       }}
@@ -73,7 +73,12 @@ const Comment = () => {
       </View>
 
       <InputAccessoryView
-        style={{ paddingRight: 50, flex: 1, alignItems: "center" }}
+        style={{
+          paddingRight: 50,
+          flex: 1,
+          alignItems: "center",
+          backgroundColor: "white",
+        }}
       >
         <View
           style={{
@@ -84,6 +89,7 @@ const Comment = () => {
             borderRadius: 5,
             paddingHorizontal: 15,
             maxWidth: 400,
+            backgroundColor: "white",
           }}
         >
           <TextInput
@@ -114,7 +120,7 @@ const Comment = () => {
           </TouchableOpacity>
         </View>
       </InputAccessoryView>
-    </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
